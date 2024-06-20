@@ -1,0 +1,157 @@
+﻿Student 3: Name: Saikat Roy, Roll No. : 30001222059 , Reg No. : 223001010660, Sec-A. (Question No:-10,11,12)¶
+10) Set Manipulation Algorithm by Union-Find (Find Function, Union Function, Path Compression (Modifications to Find()):)¶
+In [3]:
+class UnionFind:
+    def __init__(self, n):
+        self.parent = list(range(n))
+        self.rank = [0] * n        
+    def union(self, x, y):
+        root_x = self.find(x)
+        root_y = self.find(y)
+        if self.rank[root_x] < self.rank[root_y]:
+            self.parent[root_x] = root_y
+        elif self.rank[root_y] < self.rank[root_x]:
+            self.parent[root_y] = root_x
+        else:
+            self.parent[root_y] = root_x
+            self.rank[root_x] += 1
+    def find(self, x):
+        if self.parent[x] != x:
+            self.parent[x] = self.find(self.parent[x])
+        return self.parent[x]
+    def path_compression(self, x):
+        while self.parent[x] != x:
+            self.parent[x] = self.find(self.parent[x])
+            x = self.parent[x]
+    def find_with_path_compression(self, x):
+        self.path_compression(x)
+        return self.parent[x]
+uf = UnionFind(5)
+uf.union(1, 2)
+uf.union(3, 4)
+print("OUTPUT:-")
+print(uf.find_with_path_compression(2)) 
+print(uf.find_with_path_compression(3)) 
+OUTPUT:-
+1
+3
+11) Union by Rank and Union by Size:¶
+11.1) Union by Rank¶
+In [6]:
+class DisjointSet: 
+	def __init__(self, size): 
+		self.parent = [i for i in range(size)] 
+		self.rank = [0] * size 
+	def find(self, i):  
+		if self.parent[i] != i: 
+			self.parent[i] = self.find(self.parent[i])  
+		return self.parent[i] 
+	def union_by_rank(self, i, j): 
+		irep = self.find(i) 
+		jrep = self.find(j)  
+		if irep == jrep: 
+			return 
+		irank = self.rank[irep] 
+		jrank = self.rank[jrep] 
+		if irank < jrank: 
+			self.parent[irep] = jrep  
+		elif jrank < irank:  
+			self.parent[jrep] = irep 
+		else: 
+			self.parent[irep] = jrep 
+			self.rank[jrep] += 1
+	def main(self):  
+		size = 5
+		ds = DisjointSet(size) 
+		ds.union_by_rank(0, 1) 
+		ds.union_by_rank(2, 3) 
+		ds.union_by_rank(1, 3) 
+		for i in range(size): 
+			print(f"Element {i} belongs to the set with representative {ds.find(i)}") 
+print("OUTPUT:-")
+ds = DisjointSet(size=5) 
+ds.main() 
+OUTPUT:-
+Element 0 belongs to the set with representative 3
+Element 1 belongs to the set with representative 3
+Element 2 belongs to the set with representative 3
+Element 3 belongs to the set with representative 3
+Element 4 belongs to the set with representative 4
+11.2) Union by Size¶
+In [8]:
+# python program for above problem
+class UnionFind: 
+	def __init__(self, n): 
+		self.Parent = list(range(n)) 
+		self.Size = [1] * n 
+	def find(self, i): 
+		if self.Parent[i] != i: 
+			self.Parent[i] = self.find(self.Parent[i]) 
+		return self.Parent[i] 
+	def unionBySize(self, i, j):  
+		irep = self.find(i) 
+		jrep = self.find(j) 
+		if irep == jrep: 
+			return
+		isize = self.Size[irep]  
+		jsize = self.Size[jrep] 
+		if isize < jsize: 
+			self.Parent[irep] = jrep 
+			self.Size[jrep] += self.Size[irep] 
+		else: 
+			self.Parent[jrep] = irep 
+			self.Size[irep] += self.Size[jrep] 
+n = 5
+unionFind = UnionFind(n) 
+unionFind.unionBySize(0, 1) 
+unionFind.unionBySize(2, 3) 
+unionFind.unionBySize(0, 4) 
+print("OUTPUT:-")
+for i in range(n): 
+	print("Element {}: Representative = {}".format(i, unionFind.find(i))) 
+OUTPUT:-
+Element 0: Representative = 0
+Element 1: Representative = 0
+Element 2: Representative = 2
+Element 3: Representative = 2
+Element 4: Representative = 0
+12) The complete implementation of disjoint set with path compression and union by rank.¶
+In [15]:
+class DisjSet: 
+	def __init__(self, n):  
+		self.rank = [1] * n 
+		self.parent = [i for i in range(n)] 
+	def find(self, x): 
+		if (self.parent[x] != x): 
+			self.parent[x] = self.find(self.parent[x]) 
+		return self.parent[x]  
+	def Union(self, x, y): 
+		xset = self.find(x) 
+		yset = self.find(y) 
+		if xset == yset: 
+			return
+		if self.rank[xset] < self.rank[yset]: 
+			self.parent[xset] = yset 
+		elif self.rank[xset] > self.rank[yset]: 
+			self.parent[yset] = xset 
+		else: 
+			self.parent[yset] = xset 
+			self.rank[xset] = self.rank[xset] + 1
+obj = DisjSet(5) 
+obj.Union(0, 2) 
+obj.Union(4, 2) 
+obj.Union(3, 1) 
+print("OUTPUT:-")
+if obj.find(4) == obj.find(0): 
+	print('Yes') 
+else: 
+	print('No') 
+if obj.find(1) == obj.find(0): 
+	print('Yes') 
+else: 
+	print('No') 
+OUTPUT:-
+Yes
+No
+In [ ]:
+ 
